@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thank You Project - Kenya Theme</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- ===== PAGE 1: MUSIC & LOADING ===== -->
+    <div id="page1" class="page active">
+        <div class="kenya-flag-stripes">
+            <span></span><span></span><span></span><span></span>
+        </div>
+        
+        <div class="logo-container">
+            <i class="fas fa-flag"></i>
+            <h1>🇰🇪 Thank You Project</h1>
+            <p>Welcome to our special appreciation page</p>
+        </div>
+
+        <div class="music-controls">
+            <button id="playBtn" class="play-btn">
+                <i class="fas fa-play"></i> Play Music
+            </button>
+            <div class="music-status" id="musicStatus">🔇 Click play to start</div>
+        </div>
+
+        <div class="loading-section">
+            <div class="loading-label">
+                <span>Loading Images</span>
+                <span id="imageCount">0 / 10</span>
+            </div>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="page1-footer">
+            <p>🎵 Music + Images must load before proceeding</p>
+        </div>
+    </div>
+
+    <!-- ===== PAGE 2: THANK YOU MESSAGE ===== -->
+    <div id="page2" class="page">
+        <div class="kenya-flag-stripes">
+            <span></span><span></span><span></span><span></span>
+        </div>
+        
+        <div class="thankyou-container">
+            <h2 id="typingMessage" class="typing-text"></h2>
+            <div class="emoji-rain" id="emojiRain"></div>
+        </div>
+
+        <button id="toSlideshowBtn" class="next-btn">
+            View Photos <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <!-- ===== PAGE 3: PHOTO SLIDESHOW ===== -->
+    <div id="page3" class="page">
+        <div class="kenya-flag-stripes">
+            <span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="slideshow-container">
+            <div class="slideshow-wrapper">
+                <img id="slideshowImage" class="slideshow-image" src="" alt="Thank you photo" />
+                <div class="photo-counter" id="photoCounter">1 / 10</div>
+            </div>
+            <div class="slideshow-controls">
+                <button id="prevPhoto" class="slide-btn"><i class="fas fa-chevron-left"></i></button>
+                <button id="nextPhoto" class="slide-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="photo-indicators" id="photoIndicators"></div>
+        </div>
+
+        <button id="toRatingBtn" class="next-btn">
+            Rate Our Project <i class="fas fa-star"></i>
+        </button>
+    </div>
+
+    <!-- ===== PAGE 4: RATING ===== -->
+    <div id="page4" class="page">
+        <div class="kenya-flag-stripes">
+            <span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="rating-container">
+            <h2>How would you rate this project?</h2>
+            <p class="rating-subtitle">From 1 to 10 — be honest! 😊</p>
+            
+            <div class="rating-buttons">
+                <button class="rating-btn" data-value="1">1</button>
+                <button class="rating-btn" data-value="2">2</button>
+                <button class="rating-btn" data-value="3">3</button>
+                <button class="rating-btn" data-value="4">4</button>
+                <button class="rating-btn" data-value="5">5</button>
+                <button class="rating-btn" data-value="6">6</button>
+                <button class="rating-btn" data-value="7">7</button>
+                <button class="rating-btn" data-value="8">8</button>
+                <button class="rating-btn" data-value="9">9</button>
+                <button class="rating-btn" data-value="10">10</button>
+            </div>
+
+            <div id="ratingResponse" class="rating-response"></div>
+        </div>
+
+        <button id="restartBtn" class="next-btn" style="display:none;">
+            <i class="fas fa-redo"></i> Start Over
+        </button>
+    </div>
+
+    <!-- ===== AUDIO ELEMENT ===== -->
+    <audio id="bgMusic" loop>
+        <source src="your-music.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
