@@ -108,8 +108,8 @@ playBtn.addEventListener('click', () => {
     if (isMusicPlaying) return;
     
     // Make sure the source is set correctly
-    if (!bgMusic.src || bgMusic.src.includes('your-music.mp3')) {
-        bgMusic.src = 'voice4change/reasons.mp3';
+    if (!bgMusic.src || bgMusic.src.includes('reasons.mp3')) {
+        bgMusic.src = 'reasons.mp3';
         bgMusic.load();
     }
     
