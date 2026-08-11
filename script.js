@@ -117,11 +117,11 @@ playBtn.addEventListener('click', () => {
 
 // ===== TYPING EFFECT =====
 const messages = [
-    '🇰🇪 Asanteni Sana!',
-    '🇰🇪 Thank You So Much!',
-    '🇰🇪 We Appreciate You!',
-    '🇰🇪 You are amazing!',
-    '🇰🇪 Hakuna Matata! ✨'
+    '🇰🇪 For the new friends...',
+    '🇰🇪 For the knowledge shared...!',
+    '🇰🇪 THe food, The warmth...',
+    '🇰🇪 From the bottom of our hearts',
+    '🇰🇪 Thank you very much ✨'
 ];
 
 function startTypingEffect() {
