@@ -5,14 +5,14 @@ const PHOTO_TRANSITION_DELAY = 3000; // 3 seconds per photo
 // ===== REPLACE THESE WITH YOUR ACTUAL IMAGE PATHS =====
 const imagePaths = [
     'IMG-20260810-WA0011.jpg',
-    'IMG-20260810-WA0011.jpg',
-    'IMG-20260810-WA0011.jpg',
-    'IMG-20260810-WA0011.jpg',
-    'IMG-20260810-WA0011.jpg',
-    'IMG-20260810-WA0011.jpg',
-    'IMG-20260810-WA0011.jpg',
-    'IMG-20260810-WA0011.jpg',
-    'IMG_20260811_WA0011.jpg',
+    'IMG-20260810-WA0013.jpg',
+    'IMG-20260810-WA0030.jpg',
+    'IMG-20260810-WA0188.jpg',
+    'IMG-20260810-WA0337.jpg',
+    'IMG-20260810-WA0386.jpg',
+    'IMG-20260810-WA0388.jpg',
+    'IMG-20260810-WA0390.jpg',
+    'IMG_20260811_140713_869.jpg',
     'v4c.jpg'
 ];
 
