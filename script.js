@@ -54,7 +54,7 @@ const toRatingBtn = document.getElementById('toRatingBtn');
 const bgMusic = document.getElementById('bgMusic');
 
 // ===== SET MUSIC SOURCE =====
-bgMusic.src = 'voice4change/reasons.mp3';
+bgMusic.src = 'reasons.mp3';
 bgMusic.load();
 
 // ===== PAGE NAVIGATION =====
