@@ -54,7 +54,7 @@ const toRatingBtn = document.getElementById('toRatingBtn');
 const bgMusic = document.getElementById('bgMusic');
 
 // ===== SET MUSIC SOURCE =====
-bgMusic.src = 'reasons.mp3';
+bgMusic.src = 'NF,_Sasha_Sloan_-_Only__Audio_(48k).m4a';
 bgMusic.load();
 
 // ===== PAGE NAVIGATION =====
@@ -108,8 +108,8 @@ playBtn.addEventListener('click', () => {
     if (isMusicPlaying) return;
     
     // Make sure the source is set correctly
-    if (!bgMusic.src || bgMusic.src.includes('reasons.mp3')) {
-        bgMusic.src = 'reasons.mp3';
+    if (!bgMusic.src || bgMusic.src.includes('NF,_Sasha_Sloan_-_Only__Audio_(48k).m4a')) {
+        bgMusic.src = 'NF,_Sasha_Sloan_-_Only__Audio_(48k).m4a';
         bgMusic.load();
     }
     
