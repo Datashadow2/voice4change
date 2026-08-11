@@ -53,6 +53,10 @@ const toRatingBtn = document.getElementById('toRatingBtn');
 
 const bgMusic = document.getElementById('bgMusic');
 
+// ===== SET MUSIC SOURCE =====
+bgMusic.src = 'voice4change/reasons.mp3';
+bgMusic.load();
+
 // ===== PAGE NAVIGATION =====
 function switchPage(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -102,6 +106,12 @@ function checkPage1Ready() {
 // ===== MUSIC CONTROLS =====
 playBtn.addEventListener('click', () => {
     if (isMusicPlaying) return;
+    
+    // Make sure the source is set correctly
+    if (!bgMusic.src || bgMusic.src.includes('your-music.mp3')) {
+        bgMusic.src = 'voice4change/reasons.mp3';
+        bgMusic.load();
+    }
     
     bgMusic.play().then(() => {
         isMusicPlaying = true;
