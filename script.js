@@ -1,6 +1,7 @@
 // ===== CONFIGURATION =====
 const TOTAL_IMAGES = 10;
-const PHOTO_TRANSITION_DELAY = 3000; // 3 seconds per photo
+const MIN_PHOTO_DELAY = 5000; // 5 seconds minimum
+const MAX_PHOTO_DELAY = 7000; // 7 seconds maximum
 
 // ===== REPLACE THESE WITH YOUR ACTUAL IMAGE PATHS =====
 const imagePaths = [
@@ -23,6 +24,10 @@ let currentPhotoIndex = 0;
 let slideshowInterval = null;
 let emojiInterval = null;
 let ratingSelected = false;
+let isTypingComplete = false;
+let typingTimeout = null;
+let photosViewed = 0;
+let isSlideshowComplete = false;
 
 // ===== DOM ELEMENTS =====
 const page1 = document.getElementById('page1');
@@ -54,7 +59,7 @@ const toRatingBtn = document.getElementById('toRatingBtn');
 const bgMusic = document.getElementById('bgMusic');
 
 // ===== SET MUSIC SOURCE =====
-bgMusic.src = 'NF,_Sasha_Sloan_-_Only__Audio_(48k).m4a';
+bgMusic.src = 'NF%2C_Sasha_Sloan_-_Only__Audio_(48k).m4a';
 bgMusic.load();
 
 // ===== PAGE NAVIGATION =====
@@ -65,6 +70,7 @@ function switchPage(pageId) {
 
 // ===== IMAGE LOADING =====
 function loadImages() {
+    loadedImages = 0;
     imagePaths.forEach((path, index) => {
         const img = new Image();
         img.onload = () => {
@@ -73,7 +79,6 @@ function loadImages() {
             checkPage1Ready();
         };
         img.onerror = () => {
-            // Use placeholder if image fails to load
             console.warn(`Failed to load image ${index + 1}, using placeholder`);
             loadedImages++;
             updateProgress();
@@ -107,12 +112,6 @@ function checkPage1Ready() {
 playBtn.addEventListener('click', () => {
     if (isMusicPlaying) return;
     
-    // Make sure the source is set correctly
-    if (!bgMusic.src || bgMusic.src.includes('NF,_Sasha_Sloan_-_Only__Audio_(48k).m4a')) {
-        bgMusic.src = 'NF,_Sasha_Sloan_-_Only__Audio_(48k).m4a';
-        bgMusic.load();
-    }
-    
     bgMusic.play().then(() => {
         isMusicPlaying = true;
         playBtn.innerHTML = '<i class="fas fa-music"></i> Playing...';
@@ -128,30 +127,48 @@ playBtn.addEventListener('click', () => {
 // ===== TYPING EFFECT =====
 const messages = [
     '🇰🇪 For the new friends...',
-    '🇰🇪 For the knowledge shared...!',
-    '🇰🇪 THe food, The warmth...',
+    '🇰🇪 For the knowledge shared...',
+    '🇰🇪 The food, The warmth...',
     '🇰🇪 From the bottom of our hearts',
     '🇰🇪 Thank you very much ✨'
 ];
 
 function startTypingEffect() {
+    isTypingComplete = false;
+    toSlideshowBtn.style.display = 'none';
+    
     let messageIndex = 0;
     let charIndex = 0;
     let currentMessage = messages[messageIndex];
+    
+    // Clear any existing timeout
+    if (typingTimeout) {
+        clearTimeout(typingTimeout);
+        typingTimeout = null;
+    }
+    
+    // Clear existing text
+    typingMessage.textContent = '';
     
     function typeChar() {
         if (charIndex < currentMessage.length) {
             typingMessage.textContent += currentMessage.charAt(charIndex);
             charIndex++;
-            setTimeout(typeChar, 80 + Math.random() * 40);
+            typingTimeout = setTimeout(typeChar, 80 + Math.random() * 40);
         } else {
-            setTimeout(() => {
-                typingMessage.textContent = '';
-                charIndex = 0;
-                messageIndex = (messageIndex + 1) % messages.length;
-                currentMessage = messages[messageIndex];
-                setTimeout(typeChar, 500);
-            }, 2000);
+            if (messageIndex === messages.length - 1) {
+                isTypingComplete = true;
+                toSlideshowBtn.style.display = 'inline-block';
+                toSlideshowBtn.style.animation = 'pulse 1s infinite';
+            } else {
+                setTimeout(() => {
+                    typingMessage.textContent = '';
+                    charIndex = 0;
+                    messageIndex++;
+                    currentMessage = messages[messageIndex];
+                    typingTimeout = setTimeout(typeChar, 500);
+                }, 1500);
+            }
         }
     }
     
@@ -162,7 +179,13 @@ function startTypingEffect() {
 const emojis = ['🎉', '🌟', '💫', '✨', '🎊', '❤️', '🇰🇪', '🦁', '🌅', '🎵', '💝', '🏆'];
 
 function startEmojiRain() {
-    let count = 0;
+    // Clear existing emojis
+    emojiRain.innerHTML = '';
+    if (emojiInterval) {
+        clearInterval(emojiInterval);
+        emojiInterval = null;
+    }
+    
     emojiInterval = setInterval(() => {
         const emoji = document.createElement('span');
         emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
@@ -173,12 +196,15 @@ function startEmojiRain() {
         emojiRain.appendChild(emoji);
         
         setTimeout(() => emoji.remove(), 8000);
-        count++;
     }, 200);
 }
 
 // ===== SLIDESHOW =====
 function initializeSlideshow() {
+    photosViewed = 0;
+    isSlideshowComplete = false;
+    toRatingBtn.style.display = 'none'; // Hide rate button initially
+    
     // Create indicators
     photoIndicators.innerHTML = '';
     for (let i = 0; i < TOTAL_IMAGES; i++) {
@@ -204,6 +230,16 @@ function goToPhoto(index) {
         dot.classList.toggle('active', i === currentPhotoIndex);
     });
     
+    // Track viewed photos
+    if (!isSlideshowComplete) {
+        photosViewed++;
+        if (photosViewed >= TOTAL_IMAGES) {
+            isSlideshowComplete = true;
+            toRatingBtn.style.display = 'inline-block';
+            toRatingBtn.style.animation = 'pulse 1s infinite';
+        }
+    }
+    
     // Random transition effect
     const effects = ['zoom-in', 'zoom-out', 'slide-left', 'slide-right', ''];
     const effect = effects[Math.floor(Math.random() * effects.length)];
@@ -218,15 +254,24 @@ function goToPhoto(index) {
 
 function startSlideshow() {
     if (slideshowInterval) clearInterval(slideshowInterval);
-    slideshowInterval = setInterval(() => {
+    
+    function nextPhoto() {
         const next = (currentPhotoIndex + 1) % TOTAL_IMAGES;
         goToPhoto(next);
-    }, PHOTO_TRANSITION_DELAY);
+        
+        // Random delay between 5-7 seconds
+        const delay = Math.floor(Math.random() * (MAX_PHOTO_DELAY - MIN_PHOTO_DELAY + 1)) + MIN_PHOTO_DELAY;
+        slideshowInterval = setTimeout(nextPhoto, delay);
+    }
+    
+    // Start with a random delay
+    const delay = Math.floor(Math.random() * (MAX_PHOTO_DELAY - MIN_PHOTO_DELAY + 1)) + MIN_PHOTO_DELAY;
+    slideshowInterval = setTimeout(nextPhoto, delay);
 }
 
 function stopSlideshow() {
     if (slideshowInterval) {
-        clearInterval(slideshowInterval);
+        clearTimeout(slideshowInterval);
         slideshowInterval = null;
     }
 }
@@ -267,12 +312,9 @@ const ratingStyles = {
 
 ratingButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-        if (ratingSelected) return;
-        
         const value = parseInt(btn.dataset.value);
-        ratingSelected = true;
         
-        // Highlight selected
+        // Allow re-rating - remove previous selection
         ratingButtons.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         
@@ -298,6 +340,9 @@ ratingButtons.forEach(btn => {
         if (value >= 8) {
             createCelebration();
         }
+        
+        // Update state
+        ratingSelected = true;
     });
 });
 
@@ -338,6 +383,11 @@ restartBtn.addEventListener('click', () => {
     ratingResponse.className = 'rating-response';
     ratingButtons.forEach(b => b.classList.remove('selected'));
     restartBtn.style.display = 'none';
+    toRatingBtn.style.display = 'none';
+    toSlideshowBtn.style.display = 'none';
+    photosViewed = 0;
+    isSlideshowComplete = false;
+    
     switchPage('page1');
     
     // Reset music and loading
@@ -358,7 +408,14 @@ restartBtn.addEventListener('click', () => {
         emojiInterval = null;
     }
     emojiRain.innerHTML = '';
+    
+    // Clear typing
+    if (typingTimeout) {
+        clearTimeout(typingTimeout);
+        typingTimeout = null;
+    }
     typingMessage.textContent = '';
+    isTypingComplete = false;
     
     // Reset slideshow
     stopSlideshow();
@@ -383,6 +440,16 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// Add pulse animation to CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+`;
+document.head.appendChild(style);
 
 // ===== INITIALIZE =====
 loadImages();
